@@ -3,8 +3,10 @@ import 'package:TikTokUI/theme/colors.dart';
 import 'package:TikTokUI/widgets/actiontoolbar.dart';
 import 'package:TikTokUI/widgets/header_home_page.dart';
 import 'package:TikTokUI/widgets/left_panel.dart';
+import 'package:TikTokUI/widgets/moreOption.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 
@@ -35,23 +37,90 @@ class _HomePageState extends State<HomePage>
   //   });
   // }
 
+  void choiceAction(String choice) {}
+  bool followbutton = true;
+  bool explorebutton = false;
+  void buttonFollowing() {}
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent.withOpacity(0),
-        actions: <Widget>[HeaderHomePage()],
-      ),
-      extendBodyBehindAppBar: true,
-      body: getBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Image.asset(
-          'assets/videocam.png',
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Container(
+            child: PopupMenuButton<String>(
+              offset: const Offset(-70.0, 30),
+              icon: new Icon(Icons.more_vert, color: Colors.white),
+              onSelected: choiceAction,
+              color: Colors.transparent,
+              itemBuilder: (BuildContext context) {
+                return MoreOption.choices.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(
+                      choice,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  );
+                }).toList();
+              },
+            ),
+          ),
+          elevation: 0,
+          title: TabBar(
+            indicatorColor: Colors.white,
+            labelColor: Colors.white,
+            labelStyle: GoogleFonts.pacifico(
+                fontStyle: FontStyle.italic,
+                //fontSize: 20,
+                fontSize: MediaQuery.of(context).textScaleFactor * 16.5,
+                textStyle: TextStyle(
+                  color: Colors.white,
+                )),
+            tabs: <Widget>[
+              Tab(
+                text: "Following",
+              ),
+              Tab(
+                text: "Explore",
+              )
+            ],
+          ),
+          backgroundColor: Colors.transparent.withOpacity(0),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: CircleAvatar(),
+            ),
+            //  HeaderHomePage(),
+          ],
         ),
-        backgroundColor: Colors.white,
+        extendBodyBehindAppBar: true,
+        body: TabBarView(
+          children: <Widget>[
+            getFollowerBody(),
+            getBody(),
+          ],
+        ),
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            shape: BoxShape.circle,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: Image.asset(
+                'assets/videocam.png',
+              ),
+              backgroundColor: Colors.white,
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -73,8 +142,18 @@ class _HomePageState extends State<HomePage>
             comments: items[index]['comments'],
             shares: items[index]['shares'],
             albumImg: items[index]['albumImg'],
+            views: items[index]['views'] ?? 10,
           );
         }),
+      ),
+    );
+  }
+
+  getFollowerBody() {
+    return Container(
+      color: Colors.grey[900],
+      child: Center(
+        child: Text("test"),
       ),
     );
   }
@@ -94,6 +173,7 @@ class VideoPlayerItem extends StatefulWidget {
   final String comments;
   final String shares;
   final String albumImg;
+  final int views;
   bool islike;
   VideoPlayerItem(
       {Key key,
@@ -106,6 +186,7 @@ class VideoPlayerItem extends StatefulWidget {
       this.comments,
       this.shares,
       this.albumImg,
+      this.views,
       this.videoUrl})
       : super(key: key);
 
@@ -271,26 +352,65 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                                 SizedBox(
                                   width: 2,
                                 ),
-                                Icon(
-                                  FontAwesomeIcons.commentDots,
-                                  color: Colors.white,
-                                  size: 30,
+                                Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Icon(
+                                      FontAwesomeIcons.commentDots,
+                                      color: Colors.white,
+                                      size: 28,
+                                    ),
+                                    Text(
+                                      widget.comments,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   width: 40,
                                 ),
-                                Icon(
-                                  FontAwesomeIcons.share,
-                                  color: Colors.white,
-                                  size: 28,
+                                Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Icon(
+                                      FontAwesomeIcons.share,
+                                      color: Colors.white,
+                                      size: 28,
+                                    ),
+                                    Text(
+                                      widget.shares,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   width: 2,
                                 ),
-                                Icon(
-                                  FontAwesomeIcons.solidEye,
-                                  color: Colors.white,
-                                  size: 28,
+                                Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Icon(
+                                      FontAwesomeIcons.solidEye,
+                                      color: Colors.white,
+                                      size: 28,
+                                    ),
+                                    Text(
+                                      widget.views.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
