@@ -1,3 +1,5 @@
+import 'package:TikTokUI/pages/AppUser.dart';
+import 'package:TikTokUI/pages/UserPage.dart';
 import 'package:TikTokUI/theme/colors.dart';
 import 'package:TikTokUI/widgets/FollowPerson.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +9,14 @@ class LeftPanel extends StatelessWidget {
   final String name;
   final String caption;
   final String songName;
-  final String albumImg;
+  final String profileimg;
   const LeftPanel({
     Key key,
     @required this.size,
     this.name,
     this.caption,
     this.songName,
-    this.albumImg,
+    this.profileimg,
   }) : super(key: key);
 
   final Size size;
@@ -30,21 +32,34 @@ class LeftPanel extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: NetworkImage(albumImg), fit: BoxFit.cover)),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AppUser()));
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: AssetImage("assets/userimage.png"),
+                          fit: BoxFit.cover)),
+                ),
               ),
               SizedBox(
                 width: 10,
               ),
-              Text(
-                name,
-                style: TextStyle(
-                    color: white, fontWeight: FontWeight.bold, fontSize: 16),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AppUser()));
+                },
+                child: Text(
+                  name,
+                  style: TextStyle(
+                      color: white, fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ),
               const Divider(
                 color: Colors.black,

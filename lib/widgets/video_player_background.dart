@@ -18,11 +18,6 @@ class VideoPlayerBackground extends StatelessWidget {
         width: size.width,
         decoration: BoxDecoration(
           color: black,
-        )
-        // image: DecorationImage(
-        //     image: NetworkImage(
-        //         img),
-        //     fit: BoxFit.cover)),
-        );
+        ));
   }
 }
